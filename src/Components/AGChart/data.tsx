@@ -1,43 +1,15 @@
-export function getAreaChartData(value: number) {
-  const generateRandomValue = (base: number, variation: number): number => {
-    return Math.floor(base + Math.random() * variation - variation / 2);
-  };
+import axios from "axios";
 
-  const generateData = (
-    numRecords: number
-  ): Array<{
-    value: string;
-    subscriptions: number;
-    services: number;
-    // products: number;
-  }> => {
-    const data: Array<{
-      value: string;
-      subscriptions: number;
-      services: number;
-      // products: number;
-    }> = [];
+export const getAreaChartData = async (value:string) => {
+  const data: Array<{ amount:number, date: string }> = [];
+    const res = await axios.get(`http://localhost:3000/transactions/${value}`);
 
-    for (let i = 0; i < numRecords; i++) {
-      // const monthIndex = i % months.length;
+    res.data.forEach((record: { amount: string; date: string }) => {
+      data.push({ amount: parseFloat(record.amount), date: record.date});
+    });
+  return data;
 
-      data.push({
-        value: `${i}`,
-        subscriptions: generateRandomValue(50, 50),
-        services: generateRandomValue(150, 100),
-        // products: generateRandomValue(100, 100),
-      });
-    }
-
-    return data;
-  };
-
-  // Invoke the function and return the result
-  const result = generateData(value);
-  console.log("getData***", result);
-
-  return result;
-}
+};
 
 export function pieChartData(numRecords: number = 5) {
   const assets = [

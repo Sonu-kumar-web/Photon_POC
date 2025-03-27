@@ -1,52 +1,44 @@
 import { AgChartOptions } from "ag-charts-community";
 
-export const DAILY_TRANSACTION_CONFIG: AgChartOptions = {
-    title: {
-      text: "Daily Transactions",
-    },
-    subtitle: {
-      text: "",
-    },
-    //   todo: take chart data from view (dashboard in this case)
-    //   data: chartData,
-    series: [
-      {
-        type: "area",
-        xKey: "date",
-        yKey: "amount",
-        yName: "Amount",
-        stroke: "#2196F3",
-        marker: {
-          fill: "#2196F3",
-          stroke: "#2196F3",
-        },
-      },
-    ],
-    axes: [
-      {
-        type: "category",
-        position: "bottom",
-        title: {
-          text: "Date",
-        },
-      },
-      {
-        type: "number",
-        position: "left",
-        title: {
-          text: "Amount ($)",
-        },
-        label: {
-          formatter: (params: { value: number }) => {
-            return `$${params.value}`;
+export const AREA_CHART_CONFIG: AgChartOptions = {
+    title: { text: "Area Chart" },
+        height: 400,
+        series: [
+          {
+            type: "area",
+            xKey: "date",
+            yKey: "amount",
+            yName: "Amount",
+            stroke: "red",
+            strokeWidth: 1,
+            fill: "pink",
+            marker: {
+              enabled: false,
+              fill: "red",
+            },
+            interpolation: { type: "smooth" },
           },
-        },
-      },
-    ],
-    legend: {
-      enabled: true,
-    },
-    tooltip: {
-      enabled: true,
-    },
+        ],
   };
+
+export const PIE_CHART_CONFIG: AgChartOptions = {
+        title: {
+          text: "Portfolio Composition",
+        },
+        height: 500,
+        width: 500,
+        series: [
+          {
+            type: "pie",
+            angleKey: "amount",
+            calloutLabelKey: "asset",
+            sectorLabelKey: "amount",
+            sectorLabel: {
+              color: "white",
+              fontWeight: "bold",
+              formatter: ({ value }: { value: number }) =>
+                `$${(value / 1000).toFixed(0)}K`,
+            },
+          },
+        ],
+}

@@ -23,9 +23,7 @@ import { SaltProvider } from "@salt-ds/core";
 import "@salt-ds/theme/index.css";
 
 createRoot(document.getElementById("root")!).render(
-  <StrictMode>
     <SaltProvider>
       <App />
     </SaltProvider>
-  </StrictMode>
 );

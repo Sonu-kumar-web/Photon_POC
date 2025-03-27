@@ -1,7 +1,9 @@
 import type { ReactElement } from "react";
 import { useState } from "react";
-import AGChart from "../AGChart";
+import {AGChartAdaptor} from "../AGChart";
 import { pieChartData } from "../AGChart/data";
+
+import {PIE_CHART_CONFIG} from "../../config/AGChart";
 
 interface SelectedChartData {
   asset: string;
@@ -20,29 +22,8 @@ const PieChartData = (): ReactElement => {
   };
 
   const [pieChartOption, setPieOption] = useState<object>({
+    ...PIE_CHART_CONFIG,
     data: pieChartData(),
-    title: {
-      text: "Portfolio Composition",
-    },
-    height: 500,
-    width: 500,
-    series: [
-      {
-        type: "pie",
-        angleKey: "amount",
-        calloutLabelKey: "asset",
-        sectorLabelKey: "amount",
-        sectorLabel: {
-          color: "white",
-          fontWeight: "bold",
-          formatter: ({ value }: { value: number }) =>
-            `$${(value / 1000).toFixed(0)}K`,
-        },
-        seriesNodeClick: (event: any) => {
-          console.log("Clicked node:", event);
-        },
-      },
-    ],
     listeners: {
       seriesNodeClick: handlePieChartClick,
     },
@@ -50,7 +31,7 @@ const PieChartData = (): ReactElement => {
 
   return (
     <div>
-      <AGChart options={pieChartOption} />
+      <AGChartAdaptor options={pieChartOption} />
       <div>
         <h3>Selected Node Data</h3>
         {currentSelectedChartNodeData.asset !== "" && (

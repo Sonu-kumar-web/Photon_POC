@@ -1,15 +1,16 @@
 import type { ReactElement } from "react";
-import { useState, useMemo } from "react";
+import { useState, useLayoutEffect } from "react";
 import { getAreaChartData } from "../AGChart/data";
 import { Dropdown, Option } from "@salt-ds/core";
-import AGChart from "../AGChart";
+import { AGChartAdaptor } from "../AGChart";
+
+import { AREA_CHART_CONFIG } from "../../config/AGChart";
 
 const chartValues = [10, 20, 30, 40, 50, 1000];
 
 interface SelectedChartData {
-  value: string;
-  subscriptions: number;
-  services: number;
+  date: string;
+  amount: number;
 }
 
 const AreaChart = (): ReactElement => {
@@ -17,60 +18,27 @@ const AreaChart = (): ReactElement => {
     useState<string>("15");
   const [currentSelectedChartNodeData, setCurrentSelectedChartNodeData] =
     useState<SelectedChartData>({
-      value: "",
-      subscriptions: 0,
-      services: 0,
+      date: "",
+      amount: 0,
     });
 
   const handleAreaChartClick = (event: any) => {
     setCurrentSelectedChartNodeData(event.datum);
   };
 
-  const [areaChartData, setAreaChart] = useState<object>({
-    title: { text: "Area Chart" },
-    data: getAreaChartData(Number(currentSelectedGraphValue)),
-    height: 400,
-    series: [
-      {
-        type: "area",
-        xKey: "value",
-        yKey: "services",
-        yName: "Services",
-        stroke: "red",
-        strokeWidth: 1,
-        fill: "pink",
-        marker: {
-          enabled: false,
-          fill: "red",
-        },
-        interpolation: { type: "smooth" },
-      },
-      {
-        type: "area",
-        xKey: "value",
-        yKey: "subscriptions",
-        yName: "Subscriptions",
-        stroke: "Green",
-        strokeWidth: 1,
-        lineDash: [3, 4],
-        fill: "lightGreen",
-        marker: {
-          enabled: false,
-          fill: "Green",
-        },
-        interpolation: { type: "smooth" },
-      },
-    ],
-    listeners: {
-      seriesNodeClick: handleAreaChartClick,
-    },
-  });
+  const [areaChartData, setAreaChartData] = useState<object>({});
 
-  useMemo(() => {
-    setAreaChart({
-      ...areaChartData,
-      data: getAreaChartData(Number(currentSelectedGraphValue)),
-    });
+  useLayoutEffect(() => {
+    const getData = async ()=>{
+      setAreaChartData({
+        ...AREA_CHART_CONFIG,
+        data: await getAreaChartData(currentSelectedGraphValue),
+        listeners: {
+          seriesNodeClick: handleAreaChartClick,
+        },
+      });
+    }
+    getData()
   }, [currentSelectedGraphValue]);
 
   return (
@@ -79,7 +47,6 @@ const AreaChart = (): ReactElement => {
         style={{ width: "266px" }}
         value={currentSelectedGraphValue}
         onSelectionChange={(e, newSelected) => {
-          console.log("e***", newSelected);
           setCurrentSelectedGraphValue(newSelected[0]);
         }}
       >
@@ -87,10 +54,10 @@ const AreaChart = (): ReactElement => {
           <Option value={value} key={value} />
         ))}
       </Dropdown>
-      <AGChart options={areaChartData} />
+      <AGChartAdaptor options={areaChartData} />
       <div>
         <h3>Selected Node Data</h3>
-        {currentSelectedChartNodeData.value !== "" && (
+        {currentSelectedChartNodeData.date !== "" && (
           <pre>{JSON.stringify(currentSelectedChartNodeData, null, 2)}</pre>
         )}
       </div>

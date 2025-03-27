@@ -1,12 +1,14 @@
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
 import type { ReactElement } from "react";
 
 import Header from "./Components/Header";
 
-import AreaChart from "./Components/AreaChart";
-import PieChart from "./Components/PieChart";
+const AreaChart = lazy(() => import("./Components/AreaChart"));
+const PieChart = lazy(() => import("./Components/PieChart"));
 
-const Sentiment = (): ReactElement => {
+
+
+const App = (): ReactElement => {
   const [currentSelectedTab, setCurrentSelectedTab] = useState<number>(0);
 
   return (
@@ -16,11 +18,11 @@ const Sentiment = (): ReactElement => {
         setCurrentSelectedTab={setCurrentSelectedTab}
       />
 
-      {currentSelectedTab === 0 && <AreaChart />}
+      {currentSelectedTab === 0 && <Suspense fallback={<div>Loading...</div>}><AreaChart /></Suspense>} 
 
-      {currentSelectedTab === 1 && <PieChart />}
+      {currentSelectedTab === 1 && <Suspense fallback={<div>Loading...</div>}><PieChart /></Suspense>}
     </>
   );
 };
 
-export default Sentiment;
+export default App;

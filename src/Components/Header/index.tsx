@@ -19,18 +19,22 @@ const Header = ({
   currentSelectedTab,
   setCurrentSelectedTab,
 }: HeaderProps): ReactElement => (
-  <header style={{ backgroundColor: "black", color: "white", padding: "1rem" }}>
+  <header 
+  style={{ backgroundColor: "black", color: "white", padding: "1rem" }} 
+  // className="bg-blue-500"
+   >
     <h2>J.P Morgan | Graphite</h2>
     <StackLayout>
       <TabsNext defaultValue={`${currentSelectedTab}`}>
         <TabBar>
-          <TabListNext appearance="bordered">
+          <TabListNext appearance="bordered" >
             {tabs.map((label, index) => (
               <TabNext
                 value={label}
                 key={label}
                 style={{ backgroundColor: "black", color: "white" }}
                 onClick={() => setCurrentSelectedTab(index)}
+                
               >
                 <TabNextTrigger>{label}</TabNextTrigger>
               </TabNext>

@@ -1,21 +1,17 @@
-import { ReactElement, memo } from "react";
+import {memo, ComponentType} from "react";
 import { AgCharts } from "ag-charts-react";
 import { AgChartOptions } from "ag-charts-community";
 
-interface ChartExampleProps {
+interface AgChartProps {
   options: AgChartOptions;
 }
 
-const ChartExample = ({ options }: ChartExampleProps): ReactElement => {
-  const chartOptions: AgChartOptions = {
-    // We can add default options here
-    ...options,
+
+const Wrapper =
+  (AGChartComponent: ComponentType<AgChartProps>) =>
+  (props: any) => {
+    return <AGChartComponent {...props} />;
   };
 
-  // Use Styled components
-  return (
-      <AgCharts options={chartOptions} />
-  );
-};
+export const AGChartAdaptor = memo(Wrapper(AgCharts));
 
-export default memo(ChartExample);
